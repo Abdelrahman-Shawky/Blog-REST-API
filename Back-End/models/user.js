@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'I am new'
     },
-    posts: {
+    posts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Post'
-    }
+    }]   
 }, {timestamps: true});
 
 module.exports = mongoose.model('User', userSchema);
