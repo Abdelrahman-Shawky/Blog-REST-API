@@ -13,7 +13,9 @@ exports.getPosts = async (req, res, next) => {
     try {
         totalItems = await Post.find().countDocuments();
         const posts = await Post.find()
-        .populate('creator').skip((currentPage - 1) * perPage).limit(perPage);
+        .populate('creator')
+        .sort({createdAt: -1})
+        .skip((currentPage - 1) * perPage).limit(perPage);
         res.status(200).json({ message: 'Fetched Successfully', posts: posts, totalItems: totalItems });
     } catch (err) {
         if (!err.statusCode) {
@@ -125,7 +127,7 @@ exports.updatePost = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
-        if (post.creator.toString() !== req.userId) {
+        if (post.creator._id.toString() !== req.userId) {
             const error = new Error('Not Authorized');
             error.statusCode = 403; // authorization issue
             throw error
@@ -170,6 +172,9 @@ exports.deletePost = async (req, res, next) => {
         const user = await User.findById(req.userId);
         user.posts.pull(postId);
         await user.save();
+
+        io.getIO().emit('posts', {action: 'delete', post: postId});
+
         res.status(200).json({ message: 'Deleted Post' });
     } catch (err) {
         if (!err.statusCode) {

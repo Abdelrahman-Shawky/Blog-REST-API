@@ -25,7 +25,8 @@ class Feed extends Component {
   componentDidMount() {
     fetch('http://localhost:8080/auth/status', {
         headers:{
-          Authorization: 'Bearer ' + this.props.token
+          Authorization: 'Bearer ' + this.props.token,
+          'Access-Control-Allow-Origin': "*"
         }
     })
       .then(res => {
@@ -40,10 +41,17 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
-    const socket = openSocket('http://localhost:8080');
+    const socket = openSocket('http://localhost:8080', {
+      transports: ['websocket', 'polling', 'flashsocket'],
+      withCredentials: true
+    });
     socket.on('posts', data => {
       if(data.action === 'create'){
         this.addPost(data.post);
+      } else if (data.action === 'update'){
+        this.updatePost(data.post);
+      } else if (data.action === 'delete'){
+        this.loadPosts();
       }
     })
   }
@@ -92,7 +100,8 @@ class Feed extends Component {
     }
     fetch('http://localhost:8080/feed/posts?page=' + page, {
       headers:{
-        Authorization: 'Bearer ' + this.props.token
+        Authorization: 'Bearer ' + this.props.token,
+        'Access-Control-Allow-Origin': "*"
       }
     })
       .then(res => {
@@ -122,7 +131,8 @@ class Feed extends Component {
       method: 'PATCH',
       headers:{
         Authorization: 'Bearer ' + this.props.token,
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': "*"
       },
       body: JSON.stringify({
         status: this.state.status
@@ -179,7 +189,8 @@ class Feed extends Component {
       method: method,
       body: formData,
         headers:{
-          Authorization: 'Bearer ' + this.props.token
+          Authorization: 'Bearer ' + this.props.token,
+          'Access-Control-Allow-Origin': "*"
         }
     })
       .then(res => {
@@ -198,7 +209,6 @@ class Feed extends Component {
           createdAt: resData.post.createdAt
         };
         this.setState(prevState => {
-
           return {
             isEditing: false,
             editPost: null,
@@ -226,7 +236,8 @@ class Feed extends Component {
     fetch('http://localhost:8080/feed/post/' + postId, {
       method: 'DELETE',
         headers:{
-          Authorization: 'Bearer ' + this.props.token
+          Authorization: 'Bearer ' + this.props.token,
+          'Access-Control-Allow-Origin': "*"
         }
     })
       .then(res => {
@@ -237,10 +248,11 @@ class Feed extends Component {
       })
       .then(resData => {
         console.log(resData);
-        this.setState(prevState => {
-          const updatedPosts = prevState.posts.filter(p => p._id !== postId);
-          return { posts: updatedPosts, postsLoading: false };
-        });
+        this.loadPosts();
+        // this.setState(prevState => {
+        //   const updatedPosts = prevState.posts.filter(p => p._id !== postId);
+        //   return { posts: updatedPosts, postsLoading: false };
+        // });
       })
       .catch(err => {
         console.log(err);

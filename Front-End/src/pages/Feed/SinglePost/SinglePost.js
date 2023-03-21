@@ -16,7 +16,8 @@ class SinglePost extends Component {
     const postId = this.props.match.params.postId;
     fetch('http://localhost:8080/feed/post/' + postId, {
       headers:{
-        Authorization: 'Bearer ' + this.props.token
+        Authorization: 'Bearer ' + this.props.token,
+        'Access-Control-Allow-Origin': "*"
       }
     })
       .then(res => {
