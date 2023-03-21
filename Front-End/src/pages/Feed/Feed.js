@@ -178,10 +178,10 @@ class Feed extends Component {
     formData.append('content', postData.content);
     formData.append('image', postData.image);
 
-    let url = 'http://localhost:8080/feed/post';
+    let url = 'http://localhost:8080/feed/posts';
     let method = 'POST';
     if (this.state.editPost) {
-      url = 'http://localhost:8080/feed/post/' + this.state.editPost._id;
+      url = 'http://localhost:8080/feed/posts/' + this.state.editPost._id;
       method = 'PUT';
     }
 
@@ -233,7 +233,7 @@ class Feed extends Component {
 
   deletePostHandler = postId => {
     this.setState({ postsLoading: true });
-    fetch('http://localhost:8080/feed/post/' + postId, {
+    fetch('http://localhost:8080/feed/posts/' + postId, {
       method: 'DELETE',
         headers:{
           Authorization: 'Bearer ' + this.props.token,
