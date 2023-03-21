@@ -11,6 +11,13 @@ const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 // middleware
+app.use((req,res,next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+    // res.setHeader('Access-Control-Allow-Headers', "Content-Type, Authorization");
+    next();
+});
 app.use(express.static(path.join(__dirname, 'images')));
 app.use(bodyParser.json()) // appplication/json
 
@@ -34,13 +41,7 @@ const fileFilter = (req, file, cb) => {
 };
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'));
 
-app.use((req,res,next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
-    // res.setHeader('Access-Control-Allow-Headers', "Content-Type, Authorization");
-    next();
-});
+
 
 app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
