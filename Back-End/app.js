@@ -59,7 +59,12 @@ const port = process.env.PORT || 8080;
 
 mongoose.connect(MONGODB_URI)
 .then(result => {
-    app.listen(port);
+    const server = app.listen(port);
+    const io = require('./socket').init(server); //
+    io.on('connection', socket => {
+        // for every new client that connects
+        console.log('Client connected');
+    });
 })
 .catch(err => console.log(err));
 
