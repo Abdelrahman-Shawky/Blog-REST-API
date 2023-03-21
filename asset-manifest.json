@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Blog-REST-API/static/css/main.aa371fd8.css",
+    "main.js": "/Blog-REST-API/static/js/main.8acfc1d3.js",
+    "index.html": "/Blog-REST-API/index.html",
+    "main.aa371fd8.css.map": "/Blog-REST-API/static/css/main.aa371fd8.css.map",
+    "main.8acfc1d3.js.map": "/Blog-REST-API/static/js/main.8acfc1d3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aa371fd8.css",
+    "static/js/main.8acfc1d3.js"
+  ]
+}
