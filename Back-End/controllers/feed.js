@@ -109,6 +109,8 @@ exports.updatePost = async (req, res, next) => {
     const title = req.body.title;
     const content = req.body.content;
     let imageUrl = req.body.image;
+    // const imageUrl = req.file.path.replace("\\", "/");
+
     console.log(req.body);
     if (req.file) {
         imageUrl = req.file.path.replace("\\", "/");

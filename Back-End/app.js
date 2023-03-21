@@ -24,21 +24,22 @@ app.use((req,res,next) => {
     // console.log(res);
     next();
 });
-app.use(express.static(path.join(__dirname, 'images')));
 app.use(bodyParser.json()) // appplication/json
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images');
     },
     filename: (req, file, cb) => {
-        cb(null, uuidv4());
+        cb(null, uuidv4() + '-' + file.originalname);
     }
 });
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jgg' ||
+    file.mimetype === 'image/jpg' ||
     file.mimetype === 'image/jpeg'){
         cb(null, true);
     } else {
@@ -64,24 +65,6 @@ app.use((error, req, res, next) => {
 const MONGODB_URI = process.env.DB_URI;
 const port = process.env.PORT || 8080;
 
-// const httpServer = createServer(app);
-// const io = require('./socket').init(httpServer);
-// // new Server(httpServer, {
-// //     cors: {
-// //         origin: '*',
-// //         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-// //         allowedHeaders: ['Content-Type', 'Authorization']
-// //     }
-// // });
-
-// const io = new Server(httpServer, {
-//     cors: {
-//         origin: '*',
-//         methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-//         allowedHeaders: ['Content-Type', 'Authorization']
-//     }
-// });
-
 mongoose.connect(MONGODB_URI)
 .then(result => {
     const server = app.listen(port);
@@ -90,7 +73,6 @@ mongoose.connect(MONGODB_URI)
         // for every new client that connects
         console.log('Client connected');
     });
-    // httpServer.listen(port);
 })
 .catch(err => console.log(err));
 
