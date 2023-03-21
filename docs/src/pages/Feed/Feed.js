@@ -23,7 +23,7 @@ class Feed extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:8080/auth/status', {
+    fetch('https://blog-rest-api-snn2.onrender.com/auth/status', {
         headers:{
           Authorization: 'Bearer ' + this.props.token,
           'Access-Control-Allow-Origin': "*"
@@ -41,7 +41,7 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
-    const socket = openSocket('http://localhost:8080', {
+    const socket = openSocket('https://blog-rest-api-snn2.onrender.com', {
       transports: ['websocket', 'polling', 'flashsocket'],
       withCredentials: true
     });
@@ -98,7 +98,7 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch('http://localhost:8080/feed/posts?page=' + page, {
+    fetch('https://blog-rest-api-snn2.onrender.com/feed/posts?page=' + page, {
       headers:{
         Authorization: 'Bearer ' + this.props.token,
         'Access-Control-Allow-Origin': "*"
@@ -127,7 +127,7 @@ class Feed extends Component {
 
   statusUpdateHandler = event => {
     event.preventDefault();
-    fetch('http://localhost:8080/auth/status', {
+    fetch('https://blog-rest-api-snn2.onrender.com/auth/status', {
       method: 'PATCH',
       headers:{
         Authorization: 'Bearer ' + this.props.token,
@@ -178,10 +178,10 @@ class Feed extends Component {
     formData.append('content', postData.content);
     formData.append('image', postData.image);
 
-    let url = 'http://localhost:8080/feed/posts';
+    let url = 'https://blog-rest-api-snn2.onrender.com/feed/posts';
     let method = 'POST';
     if (this.state.editPost) {
-      url = 'http://localhost:8080/feed/posts/' + this.state.editPost._id;
+      url = 'https://blog-rest-api-snn2.onrender.com/feed/posts/' + this.state.editPost._id;
       method = 'PUT';
     }
 
@@ -233,7 +233,7 @@ class Feed extends Component {
 
   deletePostHandler = postId => {
     this.setState({ postsLoading: true });
-    fetch('http://localhost:8080/feed/posts/' + postId, {
+    fetch('https://blog-rest-api-snn2.onrender.com/feed/posts/' + postId, {
       method: 'DELETE',
         headers:{
           Authorization: 'Bearer ' + this.props.token,

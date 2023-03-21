@@ -14,7 +14,7 @@ class SinglePost extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.postId;
-    fetch('http://localhost:8080/feed/post/' + postId, {
+    fetch('https://blog-rest-api-snn2.onrender.com/feed/post/' + postId, {
       headers:{
         Authorization: 'Bearer ' + this.props.token,
         'Access-Control-Allow-Origin': "*"
@@ -30,7 +30,7 @@ class SinglePost extends Component {
         this.setState({
           title: resData.post.title,
           author: resData.post.creator.name,
-          image: 'http://localhost:8080/' + resData.post.imageUrl,
+          image: 'https://blog-rest-api-snn2.onrender.com/' + resData.post.imageUrl,
           date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
           content: resData.post.content
         });
